@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Database1Model" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="Database1Entities" p1:LazyLoadingEnabled="true">
+    <EntitySet Name="Ideas" EntityType="Database1Model.Idea" />
+  </EntityContainer>
+  <EntityType Name="Idea">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" MaxLength="100" Unicode="true" FixedLength="false" Nullable="false" />
+    <Property Name="IdeaText" Type="String" MaxLength="4000" Unicode="true" FixedLength="false" Nullable="false" />
+    <Property Name="Author" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+    <Property Name="deleted" Type="Int32" />
+    <Property Type="DateTime" Name="CreationDate" Precision="3" />
+    <Property Type="DateTime" Name="LastEdit" Precision="3" />
+  </EntityType>
+</Schema>

@@ -1,0 +1,101 @@
+﻿
+@model IEnumerable<TestFORTE.Models.Idea>
+
+@{
+    ViewBag.Title = "AdminPanel";
+}
+<div class="jumbotron" style="text-align: center;">
+<h2>ADMINISTRATOR PANEL</h2>
+    <a href="/Home/ViewUsers" class="btn btn-lg btn-success">View users</a>
+    </div>
+      <h2>As an administrator here you can see and manage all of the users existing notes. You can edit, delete any note, and restore it if the note was deleted. You can also completely remove any note from the system. </h2>
+  
+<div class="jumbotron">
+    @*<textarea>@Html.ActionLink("View users", "ViewUsers")</textarea>*@
+    <br>
+    <br>
+<table>
+    <tr>
+        <th>
+            Title
+        </th>
+        <th>
+            IdeaText
+        </th>
+        <th>
+            Author
+        </th>
+        <th>
+            Created
+        </th>
+        <th>
+            Last edit
+        </th>
+        <th>
+            deleted
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+        <td>
+            @if (item.IdeaText.Length>60) 
+            { 
+                 @item.IdeaText.ToString().Substring(0,60);
+            }else{
+            @Html.DisplayFor(modelItem => item.IdeaText)}
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Author)
+        </td> 
+        <td>
+            @item.CreationDate
+        </td>
+        <td>
+            @item.LastEdit
+        </td>
+        <td>
+             @switch (item.deleted)
+             {
+                 case 0:
+                   <text>NO</text>
+                     break;
+                 case 1:
+                   <text>YES</text>
+                     break;
+                 case 2:
+                   <text>REMOVING</text>
+                     break;
+             }
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "AdminEdit", new { id=item.ID }) |
+            @if (item.deleted == 1)
+                {
+                    @Html.ActionLink("Restore", "Restore", new { id = item.ID });<text> |</text>
+                }else
+                {
+                    if(item.deleted!=2)
+                    {
+                    @Html.ActionLink("Delete", "DeleteFromPanel", new { id = item.ID })<text> |</text>
+                    }
+                }
+                @if(item.deleted!=2)
+                {
+                    @Html.ActionLink("Remove completely", "Remove", new { id = item.ID })
+                }else
+                {
+                    @Html.ActionLink("Abort removing", "AbortRemoving", new { id = item.ID })   
+                }
+        </td>
+    </tr>
+}
+
+</table>
+    <br>
+    </div><!--Jumbotron-->
+

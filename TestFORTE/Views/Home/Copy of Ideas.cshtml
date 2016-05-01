@@ -1,0 +1,106 @@
+﻿@model IEnumerable<TestFORTE.Models.Idea>
+
+@{
+    ViewBag.Title = "Ideas";
+}
+
+@if(User!=null){
+
+if (User.Identity.Name=="admin"){
+       <p>
+           Here, as an administrator, you can see all of the existing notes of all of the users:
+        </p>}else {<h2>Well.. that's what you got at this moment:</h2>}
+
+<table>
+    <tr>
+        <th>
+            Title
+        </th>
+        <th>
+            IdeaText
+        </th>
+        <th>
+            Author
+        </th>
+        @if (User.Identity.Name=="admin"){
+       <th>
+            deleted
+        </th>}
+        <th></th>
+    </tr>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IdeaText)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Author)
+        </td>
+        @if (User.Identity.Name=="admin"){
+       <th>
+
+           @switch (item.deleted)
+           {
+               case 0:
+                   <text>NO</text>
+                   break;
+               case 1:
+                   <text>YES</text>
+                   break;
+               case 2:
+                   <text>REMOVING</text>
+                   break;
+           }
+        </th> }
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
+            @if (User.Identity.Name == "admin")
+            {
+                if (item.deleted == 1)
+                {
+                    @Html.ActionLink("Restore", "Restore", new { id = item.ID });<text> |</text>
+                }else
+                {
+                    if(item.deleted!=2)
+                    {
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ID })<text> |</text>
+                    }
+                }
+                if(item.deleted!=2)
+                {
+                    @Html.ActionLink("Remove", "Remove", new { id = item.ID })
+                }else
+                {
+                @Html.ActionLink("Abort Removing", "AbortRemoving", new { id = item.ID })   
+                }
+            }else 
+            {
+                switch (item.deleted)
+                {
+                   case 0:
+                       @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                       break;
+                   case 2:
+                       {
+                           
+                       <div class="tooltips">WARNING<span>Administrator wants to complitely remove this note for some reason.</span></div>
+                       @Html.ActionLink("Agree", "UserRemove", new { id = item.ID })
+                       break;
+                       }
+                }                
+            }
+        </td>
+    </tr>
+}
+
+</table>
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+    } else {<h2>You have to be authorized to see your ideas.</h2>}
+

@@ -1,0 +1,55 @@
+﻿@model IEnumerable<TestFORTE.Models.Idea>
+
+@{
+    ViewBag.Title = "Ideas";
+}
+
+@if(User!=null){
+
+   <h2>Well.. that's what you've got at this moment:</h2>
+
+    if (Model.Count()==0) 
+    { <h3>
+     Not so much :( Maybe you want to: 
+    </h3>}                                                                         
+                                                                                                                                                  
+foreach (var item in Model)
+{
+    <div class="jumbotron">
+    <div class="row">
+            <div>
+              <h2><font color="#00D59F" font-weight="800">@Html.DisplayFor(modelItem => item.Title)</font></h2>
+                <hr>
+              <p> @Html.DisplayFor(modelItem => item.IdeaText)</p>
+                <hr>
+            <h3>Author: @Html.DisplayFor(modelItem => item.Author)</h3>
+                <h4>Created: @item.CreationDate &#160;&#160;&#160;&#160;&#160;&#160;|&#160;&#160;&#160;&#160;&#160;&#160; Last edit: @item.LastEdit</h4>
+
+            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
+            @switch (item.deleted)
+                {
+                   case 0:
+                       @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                       break;
+                   case 2:
+                       {
+                           
+                       <div class="tooltips">WARNING <span>Administrator wants to completely remove this note for some reason.</span></div>
+                       @Html.ActionLink("Agree", "UserRemove", new { id = item.ID }) <text> |</text>
+                       @Html.ActionLink("Cancel", "UserRestore", new { id = item.ID })
+                       break;
+                       }
+                }           
+                </div><!--/.col-xs-6.col-lg-4-->
+        </div>
+        </div>
+}
+
+<h3>
+    
+    @Html.ActionLink("Create New", "Create")
+</h3>
+    } else {<h2>You have to be authorized to see your ideas.</h2>}
+
+
+

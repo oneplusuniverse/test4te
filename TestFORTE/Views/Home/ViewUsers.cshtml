@@ -1,0 +1,86 @@
+﻿@model IEnumerable<TestFORTE.Models.Idea>
+
+@{
+    ViewBag.Title = "ViewUsers";
+}
+
+<h2>Users:</h2>
+<div class="jumbotron">
+<table>
+    <tr>
+        <th>
+            User
+        </th>
+        <th>
+            Role
+        </th>
+        <th></th>
+    </tr>
+    @{var allUsers = Membership.GetAllUsers();
+      
+      }
+@foreach (var item in allUsers) {
+    var allAdministrators = Roles.FindUsersInRole("Administrators", Convert.ToString(item));
+    var allModerators = Roles.FindUsersInRole("moderators", Convert.ToString(item));
+    var allsimpleUsers = Roles.FindUsersInRole("User", Convert.ToString(item));
+    String userrole = "";
+    <tr>
+        <td>
+            @item
+        </td>
+        <td>
+             @foreach (var admin in allAdministrators)
+            {
+                if (Convert.ToString(item) == admin)
+                { 
+                    userrole="Administrators";
+                <span>Administrators</span>
+                }
+            }
+            @foreach (var moder in allModerators)
+            {
+                if (Convert.ToString(item) == moder)
+                {
+                    userrole="moderators";
+                <span>Moderators</span>
+                }
+            }
+            @foreach (var simpleUser in allsimpleUsers)
+            {
+                if (Convert.ToString(item) == simpleUser)
+                {
+                    userrole="User";
+                <span>User</span>
+                }
+            }
+        </td>
+           
+        <td>
+            @switch (userrole)
+             {
+                 case "Administrators":
+                     if (Convert.ToString(item) == "admin") { <h5>PROTECTED</h5>}
+                     else
+                     {
+                     @Html.ActionLink("Make moderator", "MakeModerator", new { username = Convert.ToString(item), userrole }); <text> | </text>
+                     @Html.ActionLink("Make user", "MakeUser", new { username = Convert.ToString(item), userrole });
+                     }
+                    
+                     break;
+                 case "moderators":
+                   @Html.ActionLink("Make administrator", "MakeAdmin", new { username = Convert.ToString(item), userrole }); <text> | </text>
+                   @Html.ActionLink("Make user", "MakeUser", new { username = Convert.ToString(item), userrole });   
+                     break;
+                 case "User":
+                     @Html.ActionLink("Make administrator", "MakeAdmin", new { username = Convert.ToString(item), userrole });<text> | </text>
+                     @Html.ActionLink("Make moderator", "MakeModerator", new { username = Convert.ToString(item), userrole });
+                     break;
+             }
+            
+            
+        </td>
+    </tr>
+}
+
+</table>
+    <div>

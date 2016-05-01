@@ -1,0 +1,33 @@
+﻿@model TestFORTE.Models.Idea
+
+@{
+    ViewBag.Title = "Create an Idea note";
+}
+<h2>Create an Idea note</h2>
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    <fieldset class="ideastextarea">       
+            <h4>@Html.LabelFor(model => model.Title) </h4>         
+        <div class="form-control">
+            @Html.EditorFor(model => model.Title)
+            @Html.ValidationMessageFor(model => model.Title)
+        </div>            
+            <h4>@Html.LabelFor(model => model.IdeaText)  </h4>
+          
+        <div>
+            @Html.TextAreaFor(model => model.IdeaText)
+            @Html.ValidationMessageFor(model => model.IdeaText)
+        </div>
+        <br>
+        <p>
+            <input type="submit"  value="Create New" class="btn btn-success" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
